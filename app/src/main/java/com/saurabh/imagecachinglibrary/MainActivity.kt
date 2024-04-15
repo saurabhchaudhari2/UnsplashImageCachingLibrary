@@ -32,7 +32,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 private val imageRepository = ImageRepository(RetrofitInstance.api)
-private val TAG: String? = "MainActivity"
 class MainActivity : ComponentActivity() {
 
 
@@ -70,8 +69,7 @@ class MainActivity : ComponentActivity() {
                     .padding(16.dp)
             )
             ImageGridScreen(
-                imageBitmaps = imageBitmaps,
-                modifier = Modifier.fillMaxSize()
+                imageBitmaps = imageBitmaps
             )
         }
 
@@ -91,7 +89,7 @@ class MainActivity : ComponentActivity() {
                         val bitmap = runCatching { // Using runCatching to handle any exceptions
                             val imageCachingLibrary =
                                 ImageCachingLibrary(context) // Creating an instance of the ImageCachingLibrary class
-                            imageCachingLibrary.getImage(url.toString()) // Downloading the image from the given URL
+                            imageCachingLibrary.getImage(url) // Downloading the image from the given URL
                         }.getOrNull()
                         downloadedImages.add(bitmap) // Adding the downloaded Bitmap object to the list
                     }

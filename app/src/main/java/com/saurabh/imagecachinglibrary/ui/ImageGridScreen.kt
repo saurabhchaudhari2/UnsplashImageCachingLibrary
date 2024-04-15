@@ -33,8 +33,8 @@ import androidx.compose.ui.unit.dp
 // A composable function that displays a grid of images with a snackbar at the bottom
 @Composable
 fun ImageGridScreen(
-    imageBitmaps: List<Bitmap?>, // A list of Bitmap objects representing the images to be displayed
-    modifier: Modifier
+    imageBitmaps: List<Bitmap?> // A list of Bitmap objects representing the images to be displayed
+
 ) {
     // Creating a SnackbarHostState object to manage the snackbar
     val snackbarHostState = remember { SnackbarHostState() }

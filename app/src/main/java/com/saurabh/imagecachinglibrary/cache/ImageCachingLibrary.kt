@@ -50,7 +50,9 @@ class ImageCachingLibrary(private val context: Context) {
         // Check the disk cache
         val diskCacheFile = File(diskCacheDir, imageUrl.hashCode().toString())
         if (diskCacheFile.exists()) {
-            val bitmap = BitmapFactory.decodeStream(FileInputStream(diskCacheFile))
+            val bitmap = withContext(Dispatchers.IO) {
+                BitmapFactory.decodeStream(FileInputStream(diskCacheFile))
+            }
             inMemoryCache.put(imageUrl, bitmap)
             return bitmap
         }
