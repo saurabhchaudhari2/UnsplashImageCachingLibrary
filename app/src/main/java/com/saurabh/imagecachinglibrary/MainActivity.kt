@@ -32,6 +32,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 private val imageRepository = ImageRepository(RetrofitInstance.api)
+private val TAG: String? = "MainActivity"
 class MainActivity : ComponentActivity() {
 
 
@@ -69,40 +70,25 @@ class MainActivity : ComponentActivity() {
                     .padding(16.dp)
             )
             ImageGridScreen(
-                imageBitmaps = imageBitmaps
+                imageBitmaps = imageBitmaps,
+                modifier = Modifier.fillMaxSize(),
+                urls = imageUrls
             )
         }
 
         LaunchedEffect(Unit) {
             // Fetch 30 random images from the Unsplash API
-            val images = imageRepository.getRandomImages(30)
+            val images = imageRepository.getRandomImages(100)
 
             //clearing and adding all image urls in list
             imageUrls.clear()
             imageUrls.addAll(images)
 
-            val downloadedImages =
-                mutableListOf<Bitmap?>() // Creating a list to store the downloaded Bitmap objects
-            coroutineScope { // Creating a coroutine scope
-                launch(Dispatchers.IO) { // Launching a coroutine on the IO dispatcher
-                    imageUrls.forEach { url ->
-                        val bitmap = runCatching { // Using runCatching to handle any exceptions
-                            val imageCachingLibrary =
-                                ImageCachingLibrary(context) // Creating an instance of the ImageCachingLibrary class
-                            imageCachingLibrary.getImage(url) // Downloading the image from the given URL
-                        }.getOrNull()
-                        downloadedImages.add(bitmap) // Adding the downloaded Bitmap object to the list
-                    }
-                }
-            }
-            withContext(Dispatchers.Main) { // Switching to the main dispatcher
-                imageBitmaps.clear() // Clearing the list of Bitmap objects
-                imageBitmaps.addAll(downloadedImages) // Adding the downloaded Bitmap objects to the list
-                isLoading = false // Setting isLoading to false when the data is loaded
-            }
+            isLoading = false // Setting isLoading to false when the data is loaded
         }
     }
 }
+
 
 
 

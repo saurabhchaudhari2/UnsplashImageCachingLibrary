@@ -3,6 +3,7 @@
 package com.saurabh.imagecachinglibrary.ui
 
 import android.graphics.Bitmap
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -23,18 +24,21 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 // A composable function that displays a grid of images with a snackbar at the bottom
 @Composable
 fun ImageGridScreen(
-    imageBitmaps: List<Bitmap?> // A list of Bitmap objects representing the images to be displayed
-
+    imageBitmaps: List<Bitmap?>, // A list of Bitmap objects representing the images to be displayed
+    urls : List<String>,
+    modifier: Modifier
 ) {
     // Creating a SnackbarHostState object to manage the snackbar
     val snackbarHostState = remember { SnackbarHostState() }
@@ -48,15 +52,20 @@ fun ImageGridScreen(
         // Calling the TopAppBar composable to display the top bar
         // Calling the TopAppBar composable to display the top bar
         TopAppBar(
-            title = { Text("Image Grid") }, // Setting the title of the top bar
-            //backgroundColor = Color.White, // Setting the background color of the TopAppBar composable
-            modifier = Modifier.fillMaxWidth() // Setting the width of the TopAppBar composable to fill the available width
+            title = { Text("Image Grid") },
+            colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = Color.White, // Set your desired background color
+                titleContentColor = Color.Black // Set your desired text color
+            ),
+            modifier = Modifier.fillMaxWidth()
         )
         // Calling the ImageGrid composable to display the image grid
         ImageGrid(
             imageBitmaps = imageBitmaps,
-            modifier = Modifier.fillMaxSize()
-                .padding(top = 56.dp)
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = 56.dp),
+            urls = urls
         )
 
         // Calling the SnackbarHost composable to display the snackbar
@@ -71,7 +80,8 @@ fun ImageGridScreen(
 @Composable
 fun ImageGrid(
     imageBitmaps: List<Bitmap?>, // A list of Bitmap objects representing the images to be displayed
-    modifier: Modifier = Modifier // A Modifier object to apply modifications to the composable
+    modifier: Modifier = Modifier, // A Modifier object to apply modifications to the composable
+    urls: List<String>
 ) {
     // A LazyVerticalGrid composable that displays the image grid
     LazyVerticalGrid(
@@ -82,13 +92,14 @@ fun ImageGrid(
         modifier = modifier
     ) {
         // A loop that creates an ImageWithPlaceholder composable for each Bitmap object in the imageBitmaps list
-        items(imageBitmaps.size) { index ->
+        items(urls.size) { index ->
+            Log.d("ImageWithPlaceholder", "ImageGrid: ${urls.get(index)}")
             ImageWithPlaceholder(
-                bitmap = imageBitmaps[index], // The Bitmap object to be displayed
                 modifier = Modifier
                     .fillMaxWidth() // Setting the width of the ImageWithPlaceholder composable to fill the available width
-                    .aspectRatio(1f) // Setting the aspect ratio of the ImageWithPlaceholder composable to 1:1
-                    .clip(RoundedCornerShape(8.dp)) // Rounding the corners of the ImageWithPlaceholder composable
+                    .aspectRatio(.57f) // Setting the aspect ratio of the ImageWithPlaceholder composable to 1:1
+                    .clip(RoundedCornerShape(16.dp)), // Rounding the corners of the ImageWithPlaceholder composable
+                url = urls[index]
             )
         }
     }
