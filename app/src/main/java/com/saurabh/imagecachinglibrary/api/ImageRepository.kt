@@ -1,46 +1,18 @@
 package com.saurabh.imagecachinglibrary.api
 
-import android.util.Log
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import com.saurabh.imagecachinglibrary.paging.UnsplashPagingSource
 
 
 class ImageRepository(private val api: UnsplashApi) {
 
-
-    suspend fun getRandomImages(count: Int): List<String> {
-        val accessToken = "SGOSpqy0RFwytK1-ECcaL5IUShlZvKpb3suL3pW3Qxc"
-        return withContext(Dispatchers.IO) {
-            val imageResponse = api.getPhotos(count, accessToken, 1)
-            if (imageResponse.isNotEmpty()) {
-                var list1 =  imageResponse.map { it.urls }.toString()
-                var list =  imageResponse.map { it.urls.small }.toString()
-                Log.d("ImageRepository", "getRandomImages: $list1")
-                Log.d("ImageRepository", "getRandomImages: $list")
-                // Extract the URL list from the Root object
-                return@withContext imageResponse.map { it.urls.small }
-            } else {
-                // Handle the error
-                emptyList()
-            }
-        }
-    }
-
-    suspend fun getPhotos(count: Int): List<String> {
-        val accessToken = "SGOSpqy0RFwytK1-ECcaL5IUShlZvKpb3suL3pW3Qxc"
-        return withContext(Dispatchers.IO) {
-            val imageResponse = api.getPhotos(count, accessToken, 1)
-            if (imageResponse.isNotEmpty()) {
-                var list1 =  imageResponse.map { it.urls }.toString()
-                var list =  imageResponse.map { it.urls.small }.toString()
-                Log.d("ImageRepository", "getRandomImages: $list1")
-                Log.d("ImageRepository", "getRandomImages: $list")
-                // Extract the URL list from the Root object
-                return@withContext imageResponse.map { it.urls.small }
-            } else {
-                // Handle the error
-                emptyList()
-            }
-        }
-    }
+    fun getPhotos(
+        perPage: Int,
+        authorization: String,
+        pageNumber: Int
+    ) = Pager(
+        config = PagingConfig(pageSize = perPage),
+        pagingSourceFactory = { UnsplashPagingSource(api, authorization, pageNumber) }
+    ).flow
 }

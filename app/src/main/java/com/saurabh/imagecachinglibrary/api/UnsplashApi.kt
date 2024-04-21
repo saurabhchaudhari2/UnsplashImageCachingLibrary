@@ -11,13 +11,6 @@ import retrofit2.http.Url
 
 interface UnsplashApi {
 
-
-    @GET("photos/random")
-    suspend fun getRandomImages(
-        @Query("count") count: Int,
-        @Query("client_id") authorization: String
-    ): List<ImageResponse>
-
     @GET("photos")
     suspend fun getPhotos(
         @Query("per_page") perPage:Int,
