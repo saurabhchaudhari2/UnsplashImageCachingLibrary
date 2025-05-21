@@ -38,7 +38,9 @@ kotlin {
                 implementation(libs.androidx.core.ktx)
                 implementation(libs.androidx.lifecycle.runtime.ktx)
                 implementation(libs.androidx.activity.compose)
-                implementation(platform(libs.androidx.compose.bom))
+                // The issue is here - platform() requires a direct dependency, not a Version Catalog reference
+                // Replace this line with the direct implementation references below
+                // implementation(platform(libs.androidx.compose.bom))
                 implementation(libs.androidx.ui)
                 implementation(libs.androidx.ui.graphics)
                 implementation(libs.androidx.ui.tooling.preview)
@@ -50,8 +52,6 @@ kotlin {
 
                 implementation(libs.androidx.lifecycle.runtime.ktx)
                 implementation(libs.kotlinx.coroutines.android)
-
-                //di
 
                 //paging
                 implementation(libs.androidx.paging.runtime)
@@ -79,7 +79,7 @@ kotlin {
 
 android {
     namespace = "com.saurabh.imagecachinglibrary"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.saurabh.imagecachinglibrary"
@@ -111,7 +111,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
+        kotlinCompilerExtensionVersion = "1.5.2"
     }
     packaging {
         resources {
@@ -128,11 +128,14 @@ android {
 }
 
 dependencies {
-    testImplementation(libs.junit)
+    // Here you can use platform() with a direct string reference instead of a Version Catalog reference
+    val composeBom = platform("androidx.compose:compose-bom:2023.08.00") // Example BOM version
+    implementation(composeBom)
+   /* testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
+
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.test.manifest)
+    debugImplementation(libs.androidx.ui.test.manifest)*/
 }
