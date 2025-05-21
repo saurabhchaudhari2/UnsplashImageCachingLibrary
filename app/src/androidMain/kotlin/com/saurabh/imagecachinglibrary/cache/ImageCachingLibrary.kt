@@ -4,7 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.collection.LruCache
-import com.saurabh.imagecachinglibrary.api.UnsplashApi
+import com.saurabh.imagecachinglibrary.data.remote.UnsplashApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.Retrofit
